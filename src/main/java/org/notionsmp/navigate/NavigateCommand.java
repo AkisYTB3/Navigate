@@ -21,6 +21,7 @@ public class NavigateCommand extends BaseCommand {
     @Subcommand("start")
     @Syntax("[x] [y] [z] (safeMode)")
     @CommandCompletion("@nothing @nothing @nothing true|false")
+    @Description("Start navigating to target location")
     public void onStart(Player player, int x, int y, int z, @Optional String safeMode) {
         boolean safeModeBool = safeMode == null || Boolean.parseBoolean(safeMode);
         if (plugin.getActiveNavigations().containsKey(player.getUniqueId())) {
@@ -37,6 +38,7 @@ public class NavigateCommand extends BaseCommand {
     }
 
     @Subcommand("stop")
+    @Description("Stop navigating")
     public void onStop(Player player) {
         if (plugin.getActiveNavigations().containsKey(player.getUniqueId())) {
             plugin.getActiveNavigations().get(player.getUniqueId()).cancel();
@@ -51,6 +53,7 @@ public class NavigateCommand extends BaseCommand {
     @CommandPermission("navigate.use.others")
     @Syntax("<player> <x> <y> <z> (safeMode)")
     @CommandCompletion("@players @nothing @nothing @nothing true|false")
+    @Description("Start navigating player to target location")
     public void onStartFor(CommandSender sender, String playerName, int x, int y, int z, @Optional String safeMode) {
         Player player = Bukkit.getPlayer(playerName);
         if (player == null) {
@@ -77,6 +80,7 @@ public class NavigateCommand extends BaseCommand {
     @CommandPermission("navigate.use.others")
     @Syntax("<player>")
     @CommandCompletion("@players")
+    @Description("Stop navigating player")
     public void onStopFor(CommandSender sender, String playerName) {
         Player player = Bukkit.getPlayer(playerName);
         if (player == null) {
@@ -96,6 +100,7 @@ public class NavigateCommand extends BaseCommand {
 
     @Subcommand("neofetch")
     @CommandPermission("navigate.use.neofetch")
+    @Description("Show the amazing logo of the plugin")
     public void onNeofetch(CommandSender sender) {
         MiniMessage miniMessage = MiniMessage.miniMessage();
         sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛</dark_aqua>"));

@@ -1,16 +1,23 @@
 package org.notionsmp.navigate;
 
 import co.aikar.commands.BaseCommand;
+import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.Server;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
+
+import java.lang.management.ManagementFactory;
+import java.time.ZoneId;
 
 @CommandAlias("navigate")
 @CommandPermission("navigate.use")
 public class NavigateCommand extends BaseCommand {
+    MiniMessage miniMessage = MiniMessage.miniMessage();
 
     private final Navigate plugin;
 
@@ -102,16 +109,40 @@ public class NavigateCommand extends BaseCommand {
     @CommandPermission("navigate.use.neofetch")
     @Description("Show the amazing logo of the plugin")
     public void onNeofetch(CommandSender sender) {
-        MiniMessage miniMessage = MiniMessage.miniMessage();
-        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛</dark_aqua>"));
-        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛</dark_aqua>"));
-        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛⬛⬛⬛<dark_gray>⬛</dark_gray><gray>⬛</gray>⬛⬛</dark_aqua>"));
-        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛⬛<dark_gray>⬛⬛</dark_gray><gray>⬛</gray><white>⬛</white>⬛⬛</dark_aqua>"));
-        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛<dark_gray>⬛⬛⬛</dark_gray><gray>⬛</gray><white>⬛</white>⬛⬛⬛</dark_aqua>"));
-        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛<dark_gray>⬛⬛⬛</dark_gray><gray>⬛</gray><white>⬛⬛</white>⬛⬛⬛</dark_aqua>"));
-        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛<gray>⬛</gray><white>⬛⬛</white>⬛⬛⬛⬛</dark_aqua>"));
-        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛⬛<white>⬛⬛</white>⬛⬛⬛⬛</dark_aqua>"));
-        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛⬛<white>⬛</white>⬛⬛⬛⬛⬛</dark_aqua>"));
-        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛</dark_aqua>"));
+        Server server = sender.getServer();
+        int length = (sender instanceof ConsoleCommandSender ? 4 : sender.getName().length())+1+server.getName().length();
+        String message = """
+        <hover:show_text:'Click to go to<br>the <color:#1bd96a>Modrinth</color> page'><click:open_url:'https://modrinth.com/project/3t39uukw'><#006565>
+        ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛  $topline
+        ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛  $divider
+        ⬛⬛⬛⬛⬛⬛<dark_gray>⬛</dark_gray><gray>⬛</gray>⬛⬛  $version
+        ⬛⬛⬛⬛<dark_gray>⬛⬛</dark_gray><gray>⬛</gray><white>⬛</white>⬛⬛  $tps
+        ⬛⬛<dark_gray>⬛⬛⬛</dark_gray><gray>⬛</gray><white>⬛</white>⬛⬛⬛  $uptime
+        ⬛<dark_gray>⬛⬛⬛</dark_gray><gray>⬛</gray><white>⬛⬛</white>⬛⬛⬛  Game<white>: Minecraft</white>
+        ⬛⬛⬛<gray>⬛</gray><white>⬛⬛</white>⬛⬛⬛⬛  Planet<white>: Earth</white>
+        ⬛⬛⬛⬛<white>⬛⬛</white>⬛⬛⬛⬛  $timezone
+        ⬛⬛⬛⬛<white>⬛</white>⬛⬛⬛⬛⬛  <black>0</black><dark_red>0</dark_red><dark_green>0</dark_green><gold>0</gold><dark_blue>0</dark_blue><dark_purple>0</dark_purple><dark_aqua>0</dark_aqua><gray>0</gray>
+        ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛</#006565></click></hover>  <dark_gray>0</dark_gray><red>0</red><green>0</green><yellow>0</yellow><blue>0</blue><light_purple>0</light_purple><aqua>0</aqua><white>0</white>"""
+                .replace("$topline", (sender instanceof ConsoleCommandSender ? "root" : sender.getName()) + "<white>@</white>" + server.getName())
+                .replace("$divider", "<white>" + "-".repeat(length) + "</white>")
+                .replace("$version", "Version<white>: "+ server.getMinecraftVersion() + "</white>")
+                .replace("$tps", "TPS<white>: " + Math.round(server.getTPS()[1]*10)/10.0  + "</white>")
+                .replace("$uptime", "Uptime<white>: " + formatMillis(ManagementFactory.getRuntimeMXBean().getUptime()) + "</white>")
+                .replace("$timezone", "Timezone<white>: " + ZoneId.systemDefault() + "</white>");
+        sender.sendMessage(miniMessage.deserialize(message));
+    }
+
+    @HelpCommand()
+    public void onHelp(CommandHelp help) {
+        help.showHelp();
+    }
+
+    public static String formatMillis(long milliseconds) {
+        long seconds = milliseconds / 1000;
+        long hours = seconds / 3600;
+        long minutes = (seconds % 3600) / 60;
+        long remainingSeconds = seconds % 60;
+
+        return String.format("%02d Hours, %02d Minutes, %02d Seconds", hours, minutes, remainingSeconds);
     }
 }

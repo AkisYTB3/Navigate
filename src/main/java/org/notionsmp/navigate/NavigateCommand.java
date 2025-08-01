@@ -1,7 +1,6 @@
 package org.notionsmp.navigate;
 
 import co.aikar.commands.BaseCommand;
-import co.aikar.commands.CommandHelp;
 import co.aikar.commands.annotation.*;
 import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
@@ -136,6 +135,7 @@ public class NavigateCommand extends BaseCommand {
     }
 
     @HelpCommand()
+    @Default()
     public void onHelp(CommandSender sender) {
         sender.sendMessage(miniMessage.deserialize("<color:#006565>Navigate</color> commands:"));
         sender.sendMessage(miniMessage.deserialize("<gray><required> [optional(default)]</gray>"));

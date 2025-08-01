@@ -42,25 +42,21 @@ public class PathfindingTask extends BukkitRunnable {
             return;
         }
 
-        Bukkit.getScheduler().runTaskAsynchronously(plugin, () -> {
+        plugin.foliaLib.getScheduler().runAsync(task -> {
             Location playerBlockLoc = player.getLocation().getBlock().getLocation();
             Location targetBlockLoc = targetLocation.getBlock().getLocation();
-
             List<Location> foundPath = pathfinder.findPath(playerBlockLoc, targetBlockLoc);
-
-            Bukkit.getScheduler().runTask(plugin, () -> {
+            plugin.foliaLib.getScheduler().runNextTick(nextTask -> {
                 if (!player.isOnline()) {
                     cancelNavigation();
                     return;
                 }
-
                 if (foundPath.isEmpty()) {
                     player.sendMessage("Destination is inaccessible!");
                     pathFailed = true;
                     cancelNavigation();
                     return;
                 }
-
                 currentPath = foundPath;
                 displayPathParticles();
             });

@@ -4,3 +4,4 @@ main: org.notionsmp.navigate.Navigate
 api-version: '1.21'
 load: STARTUP
 authors: [ "Akis (discord: yeahakis)" ]
+folia-supported: true

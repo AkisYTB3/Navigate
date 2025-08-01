@@ -136,8 +136,14 @@ public class NavigateCommand extends BaseCommand {
     }
 
     @HelpCommand()
-    public void onHelp(CommandHelp help) {
-        help.showHelp();
+    public void onHelp(CommandSender sender) {
+        sender.sendMessage(miniMessage.deserialize("<color:#006565>Navigate</color> commands:"));
+        sender.sendMessage(miniMessage.deserialize("<gray><required> [optional(default)]</gray>"));
+        sender.sendMessage(miniMessage.deserialize("<yellow>/navigate start <x> <y> <z> [safeMode(true)]</yellow> <gray>-</gray> Start navigating to target location"));
+        sender.sendMessage(miniMessage.deserialize("<yellow>/navigate stop</yellow> <gray>-</gray> Stop navigating"));
+        sender.sendMessage(miniMessage.deserialize("<yellow>/navigate startfor <player> <x> <y> <z> [safeMode(true)]</yellow> <gray>-</gray> Start navigating player to target location"));
+        sender.sendMessage(miniMessage.deserialize("<yellow>/navigate stopfor <player></yellow> <gray>-</gray> Stop navigating player"));
+        sender.sendMessage(miniMessage.deserialize("<yellow>/navigate neofetch</yellow> <gray>-</gray> Fun info about the plugin and server"));
     }
 
     public static String formatMillis(long milliseconds) {

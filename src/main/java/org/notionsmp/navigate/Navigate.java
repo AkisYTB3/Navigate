@@ -14,7 +14,6 @@ public final class Navigate extends JavaPlugin {
     public void onEnable() {
         activeNavigations = new HashMap<>();
         PaperCommandManager manager = new PaperCommandManager(this);
-        manager.enableUnstableAPI("help");
         manager.registerCommand(new NavigateCommand(this));
     }
 

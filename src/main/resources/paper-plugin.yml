@@ -1,5 +1,5 @@
 name: Navigate
-version: '1.0'
+version: ${version}
 main: org.notionsmp.navigate.Navigate
 api-version: '1.21'
 load: STARTUP

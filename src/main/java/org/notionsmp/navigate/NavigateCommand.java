@@ -2,9 +2,11 @@ package org.notionsmp.navigate;
 
 import co.aikar.commands.BaseCommand;
 import co.aikar.commands.annotation.*;
+import net.kyori.adventure.text.minimessage.MiniMessage;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.command.CommandSender;
+import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
 @CommandAlias("navigate")
@@ -91,5 +93,21 @@ public class NavigateCommand extends BaseCommand {
         } else {
             sender.sendMessage(player.getName() + " is not currently navigating.");
         }
+    }
+
+    @Subcommand("neofetch")
+    @CommandPermission("navigate.use.neofetch")
+    public void onNeofetch(CommandSender sender) {
+        MiniMessage miniMessage = MiniMessage.miniMessage();
+        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛</dark_aqua>"));
+        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛</dark_aqua>"));
+        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛⬛⬛⬛<dark_gray>⬛</dark_gray><gray>⬛</gray>⬛⬛</dark_aqua>"));
+        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛⬛<dark_gray>⬛⬛</dark_gray><gray>⬛</gray><white>⬛</white>⬛⬛</dark_aqua>"));
+        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛<dark_gray>⬛⬛⬛</dark_gray><gray>⬛</gray><white>⬛</white>⬛⬛⬛</dark_aqua>"));
+        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛<dark_gray>⬛⬛⬛</dark_gray><gray>⬛</gray><white>⬛⬛</white>⬛⬛⬛</dark_aqua>"));
+        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛<gray>⬛</gray><white>⬛⬛</white>⬛⬛⬛⬛</dark_aqua>"));
+        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛⬛<white>⬛⬛</white>⬛⬛⬛⬛</dark_aqua>"));
+        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛⬛<white>⬛</white>⬛⬛⬛⬛⬛</dark_aqua>"));
+        sender.sendMessage(miniMessage.deserialize("<dark_aqua>⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛</dark_aqua>"));
     }
 }

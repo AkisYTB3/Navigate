@@ -110,25 +110,27 @@ public class NavigateCommand extends BaseCommand {
     @Description("Show the amazing logo of the plugin")
     public void onNeofetch(CommandSender sender) {
         Server server = sender.getServer();
-        int length = (sender instanceof ConsoleCommandSender ? 4 : sender.getName().length())+1+server.getName().length();
-        String message = """
-        <hover:show_text:'Click to go to<br>the <color:#1bd96a>Modrinth</color> page'><click:open_url:'https://modrinth.com/project/3t39uukw'><#006565>
-        ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛  $topline
-        ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛  $divider
-        ⬛⬛⬛⬛⬛⬛<dark_gray>⬛</dark_gray><gray>⬛</gray>⬛⬛  $version
-        ⬛⬛⬛⬛<dark_gray>⬛⬛</dark_gray><gray>⬛</gray><white>⬛</white>⬛⬛  $tps
-        ⬛⬛<dark_gray>⬛⬛⬛</dark_gray><gray>⬛</gray><white>⬛</white>⬛⬛⬛  $uptime
-        ⬛<dark_gray>⬛⬛⬛</dark_gray><gray>⬛</gray><white>⬛⬛</white>⬛⬛⬛  Game<white>: Minecraft</white>
-        ⬛⬛⬛<gray>⬛</gray><white>⬛⬛</white>⬛⬛⬛⬛  Planet<white>: Earth</white>
-        ⬛⬛⬛⬛<white>⬛⬛</white>⬛⬛⬛⬛  $timezone
-        ⬛⬛⬛⬛<white>⬛</white>⬛⬛⬛⬛⬛  <black>0</black><dark_red>0</dark_red><dark_green>0</dark_green><gold>0</gold><dark_blue>0</dark_blue><dark_purple>0</dark_purple><dark_aqua>0</dark_aqua><gray>0</gray>
-        ⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛</#006565></click></hover>  <dark_gray>0</dark_gray><red>0</red><green>0</green><yellow>0</yellow><blue>0</blue><light_purple>0</light_purple><aqua>0</aqua><white>0</white>"""
-                .replace("$topline", (sender instanceof ConsoleCommandSender ? "root" : sender.getName()) + "<white>@</white>" + server.getName())
-                .replace("$divider", "<white>" + "-".repeat(length) + "</white>")
-                .replace("$version", "Version<white>: "+ server.getMinecraftVersion() + "</white>")
-                .replace("$tps", "TPS<white>: " + Math.round(server.getTPS()[1]*10)/10.0  + "</white>")
-                .replace("$uptime", "Uptime<white>: " + formatMillis(ManagementFactory.getRuntimeMXBean().getUptime()) + "</white>")
-                .replace("$timezone", "Timezone<white>: " + ZoneId.systemDefault() + "</white>");
+        int length = (sender instanceof ConsoleCommandSender ? 4 : sender.getName().length()) + 1 + server.getName().length();
+
+        String username = sender instanceof ConsoleCommandSender ? "root" : sender.getName();
+        String serverName = server.getName();
+        String minecraftVersion = server.getMinecraftVersion();
+        String tps = String.format("%.1f", Math.round(server.getTPS()[1] * 10) / 10.0);
+        String uptime = formatMillis(ManagementFactory.getRuntimeMXBean().getUptime());
+        String timezone = ZoneId.systemDefault().toString();
+
+        String message = "<br><hover:show_text:'Click to go to<br>the <color:#1bd96a>Modrinth</color> page'><click:open_url:'https://modrinth.com/project/3t39uukw'><#006565>" +
+                "⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛  " + username + "<white>@</white>" + serverName + "<br>" +
+                "⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛  <white>" + "-".repeat(length) + "</white><br>" +
+                "⬛⬛⬛⬛⬛⬛<dark_gray>⬛</dark_gray><gray>⬛</gray>⬛⬛  Version<white>: " + minecraftVersion + "</white><br>" +
+                "⬛⬛⬛⬛<dark_gray>⬛⬛</dark_gray><gray>⬛</gray><white>⬛</white>⬛⬛  TPS<white>: " + tps + "</white><br>" +
+                "⬛⬛<dark_gray>⬛⬛⬛</dark_gray><gray>⬛</gray><white>⬛</white>⬛⬛⬛  Uptime<white>: " + uptime + "</white><br>" +
+                "⬛<dark_gray>⬛⬛⬛</dark_gray><gray>⬛</gray><white>⬛⬛</white>⬛⬛⬛  Game<white>: Minecraft</white><br>" +
+                "⬛⬛⬛<gray>⬛</gray><white>⬛⬛</white>⬛⬛⬛⬛  Planet<white>: Earth</white><br>" +
+                "⬛⬛⬛⬛<white>⬛⬛</white>⬛⬛⬛⬛  Timezone<white>: " + timezone + "</white><br>" +
+                "⬛⬛⬛⬛<white>⬛</white>⬛⬛⬛⬛⬛  <black>0</black><dark_red>0</dark_red><dark_green>0</dark_green><gold>0</gold><dark_blue>0</dark_blue><dark_purple>0</dark_purple><dark_aqua>0</dark_aqua><gray>0</gray><br>" +
+                "⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛</#006565></click></hover>  <dark_gray>0</dark_gray><red>0</red><green>0</green><yellow>0</yellow><blue>0</blue><light_purple>0</light_purple><aqua>0</aqua><white>0</white>";
+
         sender.sendMessage(miniMessage.deserialize(message));
     }
 

@@ -9,15 +9,17 @@ import java.util.UUID;
 
 public final class Navigate extends JavaPlugin {
 
+    private static Navigate instance;
     private Map<UUID, PathfindingTask> activeNavigations;
     public FoliaLib foliaLib;
 
     @Override
     public void onEnable() {
+        instance = this;
         foliaLib = new FoliaLib(this);
         activeNavigations = new HashMap<>();
         PaperCommandManager manager = new PaperCommandManager(this);
-        manager.registerCommand(new NavigateCommand(this));
+        manager.registerCommand(new NavigateCommand());
     }
 
     @Override
@@ -31,4 +33,6 @@ public final class Navigate extends JavaPlugin {
     public Map<UUID, PathfindingTask> getActiveNavigations() {
         return activeNavigations;
     }
+
+    public static Navigate getInstance() { return instance; }
 }

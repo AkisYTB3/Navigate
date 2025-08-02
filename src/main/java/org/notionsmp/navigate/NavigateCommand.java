@@ -18,37 +18,31 @@ import java.time.ZoneId;
 public class NavigateCommand extends BaseCommand {
     MiniMessage miniMessage = MiniMessage.miniMessage();
 
-    private final Navigate plugin;
-
-    public NavigateCommand(Navigate plugin) {
-        this.plugin = plugin;
-    }
-
     @Subcommand("start")
     @Syntax("[x] [y] [z] (safeMode)")
     @CommandCompletion("@nothing @nothing @nothing true|false")
     @Description("Start navigating to target location")
     public void onStart(Player player, int x, int y, int z, @Optional String safeMode) {
         boolean safeModeBool = safeMode == null || Boolean.parseBoolean(safeMode);
-        if (plugin.getActiveNavigations().containsKey(player.getUniqueId())) {
-            plugin.getActiveNavigations().get(player.getUniqueId()).cancel();
-            plugin.getActiveNavigations().remove(player.getUniqueId());
+        if (Navigate.getInstance().getActiveNavigations().containsKey(player.getUniqueId())) {
+            Navigate.getInstance().getActiveNavigations().get(player.getUniqueId()).cancel();
+            Navigate.getInstance().getActiveNavigations().remove(player.getUniqueId());
             player.sendMessage("Your previous navigation has been stopped.");
         }
 
         Location targetLocation = new Location(player.getWorld(), x, y, z);
-        PathfindingTask newTask = new PathfindingTask(plugin, player, targetLocation, safeModeBool);
-        newTask.runTaskTimer(plugin, 0L, 10L);
-        plugin.getActiveNavigations().put(player.getUniqueId(), newTask);
+        PathfindingTask newTask = new PathfindingTask(player, targetLocation, safeModeBool);
+        newTask.runTaskTimer(Navigate.getInstance(), 0L, 10L);
+        Navigate.getInstance().getActiveNavigations().put(player.getUniqueId(), newTask);
         player.sendMessage("Navigation started to X:" + x + " Y:" + y + " Z:" + z + " with safe mode: " + safeModeBool);
     }
 
     @Subcommand("stop")
     @Description("Stop navigating")
     public void onStop(Player player) {
-        if (plugin.getActiveNavigations().containsKey(player.getUniqueId())) {
-            plugin.getActiveNavigations().get(player.getUniqueId()).cancel();
-            plugin.getActiveNavigations().remove(player.getUniqueId());
+        if (Navigate.getInstance().getActiveNavigations().containsKey(player.getUniqueId())) {
+            Navigate.getInstance().getActiveNavigations().get(player.getUniqueId()).cancel();
+            Navigate.getInstance().getActiveNavigations().remove(player.getUniqueId());
             player.sendMessage("Navigation stopped.");
         } else {
             player.sendMessage("You are not currently navigating.");
@@ -68,16 +62,16 @@ public class NavigateCommand extends BaseCommand {
         }
 
         boolean safeModeBool = safeMode == null || Boolean.parseBoolean(safeMode);
-        if (plugin.getActiveNavigations().containsKey(player.getUniqueId())) {
-            plugin.getActiveNavigations().get(player.getUniqueId()).cancel();
-            plugin.getActiveNavigations().remove(player.getUniqueId());
+        if (Navigate.getInstance().getActiveNavigations().containsKey(player.getUniqueId())) {
+            Navigate.getInstance().getActiveNavigations().get(player.getUniqueId()).cancel();
+            Navigate.getInstance().getActiveNavigations().remove(player.getUniqueId());
             sender.sendMessage("Previous navigation for " + player.getName() + " has been stopped.");
         }
 
         Location targetLocation = new Location(player.getWorld(), x, y, z);
-        PathfindingTask newTask = new PathfindingTask(plugin, player, targetLocation, safeModeBool);
-        newTask.runTaskTimer(plugin, 0L, 10L);
-        plugin.getActiveNavigations().put(player.getUniqueId(), newTask);
+        PathfindingTask newTask = new PathfindingTask(player, targetLocation, safeModeBool);
+        newTask.runTaskTimer(Navigate.getInstance(), 0L, 10L);
+        Navigate.getInstance().getActiveNavigations().put(player.getUniqueId(), newTask);
         sender.sendMessage("Navigation started for " + player.getName() + " to X:" + x + " Y:" + y + " Z:" + z + " with safe mode: " + safeModeBool);
         //player.sendMessage("Navigation started to X:" + x + " Y:" + y + " Z:" + z + " with safe mode: " + safeModeBool);
     }
@@ -94,9 +88,9 @@ public class NavigateCommand extends BaseCommand {
             return;
         }
 
-        if (plugin.getActiveNavigations().containsKey(player.getUniqueId())) {
-            plugin.getActiveNavigations().get(player.getUniqueId()).cancel();
-            plugin.getActiveNavigations().remove(player.getUniqueId());
+        if (Navigate.getInstance().getActiveNavigations().containsKey(player.getUniqueId())) {
+            Navigate.getInstance().getActiveNavigations().get(player.getUniqueId()).cancel();
+            Navigate.getInstance().getActiveNavigations().remove(player.getUniqueId());
             sender.sendMessage("Navigation stopped for " + player.getName() + ".");
             //player.sendMessage("Your navigation has been stopped.");
         } else {
@@ -117,7 +111,7 @@ public class NavigateCommand extends BaseCommand {
         String tps = String.format("%.1f", Math.round(server.getTPS()[1] * 10) / 10.0);
         String uptime = formatMillis(ManagementFactory.getRuntimeMXBean().getUptime());
         String timezone = ZoneId.systemDefault().toString();
-        String pluginVersion = plugin.getPluginMeta().getVersion();
+        String pluginVersion = Navigate.getInstance().getPluginMeta().getVersion();
 
         String message = "<br><hover:show_text:'Click to go to<br>the <color:#1bd96a>Modrinth</color> page'><click:open_url:'https://modrinth.com/project/3t39uukw'><#006565>" +
                 "⬛⬛⬛⬛⬛⬛⬛⬛⬛⬛  " + username + "<white>@</white>" + serverName + "<br>" +

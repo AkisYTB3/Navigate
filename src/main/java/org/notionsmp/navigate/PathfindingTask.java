@@ -10,15 +10,13 @@ import java.util.List;
 
 public class PathfindingTask extends BukkitRunnable {
 
-    private final Navigate plugin;
     private final Player player;
     private final Location targetLocation;
     private List<Location> currentPath;
     private final AStarPathfinder pathfinder;
     private boolean pathFailed = false;
 
-    public PathfindingTask(Navigate plugin, Player player, Location targetLocation, boolean safeMode) {
-        this.plugin = plugin;
+    public PathfindingTask(Player player, Location targetLocation, boolean safeMode) {
         this.player = player;
         this.targetLocation = targetLocation;
         this.pathfinder = new AStarPathfinder(safeMode);
@@ -41,11 +39,11 @@ public class PathfindingTask extends BukkitRunnable {
             return;
         }
 
-        plugin.foliaLib.getScheduler().runAsync(task -> {
+        Navigate.getInstance().foliaLib.getScheduler().runAsync(task -> {
             Location playerBlockLoc = player.getLocation().getBlock().getLocation();
             Location targetBlockLoc = targetLocation.getBlock().getLocation();
             List<Location> foundPath = pathfinder.findPath(playerBlockLoc, targetBlockLoc);
-            plugin.foliaLib.getScheduler().runNextTick(nextTask -> {
+            Navigate.getInstance().foliaLib.getScheduler().runNextTick(nextTask -> {
                 if (!player.isOnline()) {
                     cancelNavigation();
                     return;
@@ -74,6 +72,6 @@ public class PathfindingTask extends BukkitRunnable {
 
     private void cancelNavigation() {
         this.cancel();
-        plugin.getActiveNavigations().remove(player.getUniqueId());
+        Navigate.getInstance().getActiveNavigations().remove(player.getUniqueId());
     }
 }
